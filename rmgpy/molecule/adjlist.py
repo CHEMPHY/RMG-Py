@@ -620,10 +620,17 @@ def fromAdjacencyList(adjlist, group=False, saturateH=False):
                 isotope = int(iState[1:])
                 index += 1
 
+        # Next ring membership info (if provided)
+        props = {}
+        if len(data) > index:
+            rState = data[index]
+            if rState[0] == 'r':
+                props['inRing'] = bool(int(rState[1]))
+                index += 1
 
         # Create a new atom based on the above information
         if group:
-            atom = GroupAtom(atomType, unpairedElectrons, partialCharges, label, lonePairs)
+            atom = GroupAtom(atomType, unpairedElectrons, partialCharges, label, lonePairs, props)
         else:
             atom = Atom(atomType[0], unpairedElectrons[0], partialCharges[0], label, lonePairs[0])
             if isotope != -1:
@@ -750,6 +757,7 @@ def toAdjacencyList(atoms, multiplicity, label=None, group=False, removeH=False,
     atomLonePairs = {}
     atomCharge = {}
     atomIsotope = {}
+    atomProps = {}
     if group:
         for atom in atomNumbers:
             # Atom type(s)
@@ -782,7 +790,13 @@ def toAdjacencyList(atoms, multiplicity, label=None, group=False, removeH=False,
                 atomCharge[atom] = '[{0}]'.format(','.join(['+'+str(charge) if charge > 0 else ''+str(charge) for charge in atom.charge]))
 
             # Isotopes
-            atomIsotope[atom] = -1    
+            atomIsotope[atom] = -1
+
+            # Other props
+            props = []
+            if 'inRing' in atom.props:
+                props.append(' r{0}'.format(int(atom.props['inRing'])))
+            atomProps[atom] = props
     else:
         for atom in atomNumbers:
             # Atom type
@@ -827,6 +841,9 @@ def toAdjacencyList(atoms, multiplicity, label=None, group=False, removeH=False,
         # Isotopes
         if atomIsotope[atom] != -1:
             adjlist += ' i{0}'.format(atomIsotope[atom])
+        if group and len(atomProps[atom]) > 0:
+            for prop in atomProps[atom]:
+                adjlist += prop
 
         # Bonds list
         atoms2 = atom.bonds.keys()
