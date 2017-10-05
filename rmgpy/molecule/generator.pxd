@@ -17,10 +17,6 @@ cpdef str toSMARTS(Molecule mol)
 
 cpdef str toSMILES(Molecule mol)
 
-cpdef toOBMol(Molecule mol, bint returnMapping=*)
-
-cpdef toRDKitMol(Molecule mol, bint removeHs=*, bint returnMapping=*, bint sanitize=*)
-
 cpdef bint is_valid_combo(list combo, Molecule mol, list distances)
 
 cpdef list find_lowest_u_layer(Molecule mol, list u_layer, list equivalent_atoms)
