@@ -44,10 +44,6 @@ import urllib
 from collections import OrderedDict
 import itertools
 
-try:
-    import openbabel
-except:
-    pass
 from .graph import Vertex, Edge, Graph, getVertexConnectivityValue
 import rmgpy.molecule.group as gr
 from .atomtype import AtomType, atomTypes, getAtomType, AtomTypeError
@@ -58,6 +54,7 @@ import rmgpy.molecule.translator as translator
 import rmgpy.molecule.resonance as resonance
 from .kekulize import kekulize
 from .adjlist import Saturator
+from rmgpy.exceptions import DependencyError
 
 ################################################################################
 
@@ -1775,7 +1772,7 @@ class Molecule(Graph):
         logging.info('Trying to use OpenBabel to check aromaticity.')
         try:
             obmol, obAtomIds = interface.toOBMol(self, returnMapping=True)
-        except ImportError:
+        except DependencyError:
             logging.warning('Unable to check aromaticity by converting for OB Mol.')
             return [], []
         else:
