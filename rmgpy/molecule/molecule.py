@@ -1385,7 +1385,7 @@ class Molecule(Graph):
         
         Separate layer with a forward slash character.
         """
-        return translator.toAugmentedInChI(self)
+        return translator.toInChI(self, aug_level=2)
         
     
     def toInChIKey(self):
@@ -1408,7 +1408,7 @@ class Molecule(Graph):
         Simply append the multiplicity string, do not separate by a
         character like forward slash.
         """
-        return translator.toAugmentedInChIKey(self)
+        return translator.toInChIKey(self, aug_level=2)
     
 
     def toSMARTS(self):
