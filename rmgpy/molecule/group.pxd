@@ -163,6 +163,8 @@ cdef class Group(Graph):
 
     cpdef list findSubgraphIsomorphisms(self, Graph other, dict initialMap=?)
     
+    cpdef bint labeledIsSubgraphIsomorphic(self, Graph other)
+    
     cpdef bint isIdentical(self, Graph other)
 
     cpdef bint isAromaticRing(self)
